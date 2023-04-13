@@ -97,19 +97,24 @@ def train(model, train_loader,  validation_loader, epochs,  criterion, optimizer
     return model
     
     
-def net():
+def net(n_classes: int,  model_arch: str ='resnet50' ):
     '''
     TODO: Complete this function that initializes your model
           Remember to use a pretrained model
     '''
-    model = models.resnet50(pretrained=True)
-
+    model = None
+    if model_arch == 'resnet50':
+        model = models.resnet50(pretrained=True)
+    elif model_arch == 'resnet18'
+        model = models.resnet18(pretrained=True)
+    else:
+        raise('Model name error!!!!')
     for param in model.parameters():
         param.requires_grad = False   
 
     num_features=model.fc.in_features
     model.fc = nn.Sequential(
-                   nn.Linear(num_features, 4 )) ### check the number of classes
+                   nn.Linear(num_features,  n_classes)) ### check the number of classes
     return model
 
 def create_data_loaders(data, batch_size):
