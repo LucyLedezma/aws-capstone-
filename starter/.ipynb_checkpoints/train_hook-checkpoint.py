@@ -7,16 +7,26 @@ import torch.optim as optim
 import torchvision
 import torchvision.models as models
 import torchvision.transforms as transforms
-
 import argparse
+from PIL import ImageFile
+try:
+    import smdebug.pytorch as smd
+except Exception as e:
+    print(f'The module {str(e)} has not been installed')
 
-def test(model, test_loader):
+ImageFile.LOAD_TRUNCATED_IMAGES = True
+
+
+def test(model, test_loader, hook=None):
     '''
     TODO: Complete this function that can take a model and a 
           testing data loader and will get the test accuray/loss of the model
           Remember to include any debugging/profiling hooks that you might need
     '''
+    if hook is not None:
+        hook.set_mode(smd.modes.PREDICT)
     print("Testing Model on Whole Testing Dataset")
+    
     model.eval()
     running_loss=0
     running_corrects=0
@@ -34,7 +44,7 @@ def test(model, test_loader):
     total_acc = running_corrects/ len(test_loader.dataset)
     print(f"Testing Accuracy: {100*total_acc}, Testing Loss: {total_loss}")
     
-def train(model, train_loader,  validation_loader, epochs,  criterion, optimizer):
+def train(model, train_loader,  validation_loader, epochs,  criterion, optimizer, hook):
     '''
     TODO: Complete this function that can take a model and
           data loaders for training and will get train the model
@@ -48,8 +58,10 @@ def train(model, train_loader,  validation_loader, epochs,  criterion, optimizer
         for phase in ['train', 'valid']:
             print(f"Epoch {epoch}, Phase {phase}")
             if phase=='train':
+                hook.set_mode(smd.modes.TRAIN)
                 model.train()
             else:
+                hook.set_mode(smd.modes.EVAL)
                 model.eval()
             running_loss = 0.0
             running_corrects = 0
@@ -156,12 +168,16 @@ def main(args):
     train_loader = create_data_loaders(args['data_dir_training'], args['batch_size'])
     validation_loader = create_data_loaders(args['data_dir_validation'], args['batch_size'])
     test_loader = create_data_loaders(args['data_dir_test'], args['batch_size'])
-    model=train(model, train_loader,  validation_loader, loss_criterion, optimizer)
+    
+    ### hook
+    hook = smd.Hook.create_from_json_file()
+    hook.register_hook(model)
+    model=train(model, train_loader,  validation_loader, loss_criterion, optimizer, hook)
     
     '''
     TODO: Test the model to see its accuracy
     '''
-    test(model, test_loader, criterion)
+    test(model, test_loader, criterion, hook)
     
     '''
     TODO: Save the trained model
@@ -197,10 +213,12 @@ if __name__=='__main__':
     parser.add_argument(
         "--lr", type=float, default=0.01, metavar="LR", help="learning rate (default: 0.01)"
     )
-   
     parser.add_argument("--model-arch", type=str, default='resnet50')
     parser.add_argument("--model-n-classes", type=int, default=5)
+   
     # Container environment
+    
+  
     parser.add_argument("--model-dir", type=str, default=os.environ["SM_MODEL_DIR"])
     parser.add_argument("--data-dir-train", type=str, default=os.environ["SM_CHANNEL_TRAINING"])
     parser.add_argument("--data-dir-val", type=str, default=os.environ["SM_CHANNEL_VALIDATION"])
@@ -211,3 +229,4 @@ if __name__=='__main__':
     main(vars(args))
 #     args=parser.parse_args()
     
+#     main(args)

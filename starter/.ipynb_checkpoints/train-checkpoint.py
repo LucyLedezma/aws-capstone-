@@ -47,6 +47,10 @@ def train(model, train_loader,  validation_loader, epochs,  criterion, optimizer
     for epoch in range(epochs):
         for phase in ['train', 'valid']:
             print(f"Epoch {epoch}, Phase {phase}")
+            if phase=='train':
+                model.train()
+            else:
+                model.eval()
             running_loss = 0.0
             running_corrects = 0
             running_samples=0
@@ -117,7 +121,7 @@ def net(n_classes: int,  model_arch: str ='resnet50' ):
                    nn.Linear(num_features,  n_classes)) ### check the number of classes
     return model
 
-def create_data_loaders(data, batch_size):
+def create_data_loaders(path, batch_size):
     '''
     This is an optional function that you may or may not need to implement
     depending on whether you need to use data loaders or not
@@ -137,7 +141,7 @@ def main(args):
     '''
     TODO: Initialize a model by calling the net function
     '''
-    model=net()
+    model=net(args['model_n_classes'], args['model_arch'])
     
     '''
     TODO: Create your loss and optimizer
@@ -194,10 +198,12 @@ if __name__=='__main__':
         "--lr", type=float, default=0.01, metavar="LR", help="learning rate (default: 0.01)"
     )
    
+    parser.add_argument("--model-arch", type=str, default='resnet50')
+    parser.add_argument("--model-n-classes", type=int, default=5)
     # Container environment
     parser.add_argument("--model-dir", type=str, default=os.environ["SM_MODEL_DIR"])
-    parser.add_argument("--data-dir-training", type=str, default=os.environ["SM_CHANNEL_TRAINING"])
-    parser.add_argument("--data-dir-validation", type=str, default=os.environ["SM_CHANNEL_VALIDATION"])
+    parser.add_argument("--data-dir-train", type=str, default=os.environ["SM_CHANNEL_TRAINING"])
+    parser.add_argument("--data-dir-val", type=str, default=os.environ["SM_CHANNEL_VALIDATION"])
     parser.add_argument("--data-dir-test", type=str, default=os.environ["SM_CHANNEL_TEST"])
     
     args=parser.parse_args()
@@ -205,4 +211,3 @@ if __name__=='__main__':
     main(vars(args))
 #     args=parser.parse_args()
     
-#     main(args)
