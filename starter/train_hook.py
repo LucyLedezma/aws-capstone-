@@ -8,6 +8,7 @@ import torchvision
 import torchvision.models as models
 import torchvision.transforms as transforms
 import argparse
+import os
 from PIL import ImageFile
 try:
     import smdebug.pytorch as smd
@@ -121,7 +122,7 @@ def net(n_classes: int,  model_arch: str ='resnet50' ):
     model = None
     if model_arch == 'resnet50':
         model = models.resnet50(pretrained=True)
-    elif model_arch == 'resnet18'
+    elif model_arch == 'resnet18':
         model = models.resnet18(pretrained=True)
     else:
         raise('Model name error!!!!')
@@ -172,7 +173,7 @@ def main(args):
     ### hook
     hook = smd.Hook.create_from_json_file()
     hook.register_hook(model)
-    model=train(model, train_loader,  validation_loader, loss_criterion, optimizer, hook)
+    model=train(model, train_loader,  validation_loader, args['epochs'] loss_criterion, optimizer, hook)
     
     '''
     TODO: Test the model to see its accuracy
@@ -208,7 +209,7 @@ if __name__=='__main__':
         type=int,
         default=5,
         metavar="N",
-        help="number of epochs to train (default: 10)",
+        help="number of epochs to train (default: 5)",
     )
     parser.add_argument(
         "--lr", type=float, default=0.01, metavar="LR", help="learning rate (default: 0.01)"

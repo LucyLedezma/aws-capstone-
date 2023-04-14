@@ -7,10 +7,10 @@ import torch.optim as optim
 import torchvision
 import torchvision.models as models
 import torchvision.transforms as transforms
-
+import os
 import argparse
 
-def test(model, test_loader):
+def test(model, test_loader, criterion, device):
     '''
     TODO: Complete this function that can take a model and a 
           testing data loader and will get the test accuray/loss of the model
@@ -22,8 +22,8 @@ def test(model, test_loader):
     running_corrects=0
     
     for inputs, labels in test_loader:
-        # inputs=inputs.to(device)
-        # labels=labels.to(device)
+        inputs=inputs.to(device)
+        labels=labels.to(device)
         outputs=model(inputs)
         loss=criterion(outputs, labels)
         _, preds = torch.max(outputs, 1)
@@ -34,7 +34,7 @@ def test(model, test_loader):
     total_acc = running_corrects/ len(test_loader.dataset)
     print(f"Testing Accuracy: {100*total_acc}, Testing Loss: {total_loss}")
     
-def train(model, train_loader,  validation_loader, epochs,  criterion, optimizer):
+def train(model, train_loader,  validation_loader, epochs,  criterion, optimizer, device):
     '''
     TODO: Complete this function that can take a model and
           data loaders for training and will get train the model
@@ -109,7 +109,7 @@ def net(n_classes: int,  model_arch: str ='resnet50' ):
     model = None
     if model_arch == 'resnet50':
         model = models.resnet50(pretrained=True)
-    elif model_arch == 'resnet18'
+    elif model_arch == 'resnet18':
         model = models.resnet18(pretrained=True)
     else:
         raise('Model name error!!!!')
@@ -142,7 +142,7 @@ def main(args):
     TODO: Initialize a model by calling the net function
     '''
     model=net(args['model_n_classes'], args['model_arch'])
-    
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     '''
     TODO: Create your loss and optimizer
     '''
@@ -156,12 +156,12 @@ def main(args):
     train_loader = create_data_loaders(args['data_dir_training'], args['batch_size'])
     validation_loader = create_data_loaders(args['data_dir_validation'], args['batch_size'])
     test_loader = create_data_loaders(args['data_dir_test'], args['batch_size'])
-    model=train(model, train_loader,  validation_loader, loss_criterion, optimizer)
+    model=train(model, train_loader,  validation_loader, args['epochs'], loss_criterion, optimizer, device)
     
     '''
     TODO: Test the model to see its accuracy
     '''
-    test(model, test_loader, criterion)
+    test(model, test_loader, loss_criterion, device)
     
     '''
     TODO: Save the trained model
@@ -202,12 +202,12 @@ if __name__=='__main__':
     parser.add_argument("--model-n-classes", type=int, default=5)
     # Container environment
     parser.add_argument("--model-dir", type=str, default=os.environ["SM_MODEL_DIR"])
-    parser.add_argument("--data-dir-train", type=str, default=os.environ["SM_CHANNEL_TRAINING"])
-    parser.add_argument("--data-dir-val", type=str, default=os.environ["SM_CHANNEL_VALIDATION"])
+    parser.add_argument("--data-dir-training", type=str, default=os.environ["SM_CHANNEL_TRAINING"])
+    parser.add_argument("--data-dir-validation", type=str, default=os.environ["SM_CHANNEL_VALIDATION"])
     parser.add_argument("--data-dir-test", type=str, default=os.environ["SM_CHANNEL_TEST"])
     
     args=parser.parse_args()
-    print(vars(args))
+    print('User Arguments: ', vars(args))
     main(vars(args))
 #     args=parser.parse_args()
     
