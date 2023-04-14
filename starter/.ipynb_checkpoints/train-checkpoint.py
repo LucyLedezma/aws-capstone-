@@ -84,8 +84,8 @@ def train(model, train_loader,  validation_loader, epochs,  criterion, optimizer
                     )
                 
                 #NOTE: Comment lines below to train and test on whole dataset
-                if running_samples>(0.2*len(image_dataset[phase].dataset)):
-                    break
+                # if running_samples>(0.2*len(image_dataset[phase].dataset)):
+                #     break
 
             epoch_loss = running_loss / running_samples
             epoch_acc = running_corrects / running_samples
