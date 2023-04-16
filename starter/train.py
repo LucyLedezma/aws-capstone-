@@ -143,6 +143,9 @@ def main(args):
     '''
     model=net(args['model_n_classes'], args['model_arch'])
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    if torch.cuda.is_available():
+        model.cuda()
+
     '''
     TODO: Create your loss and optimizer
     '''
@@ -197,7 +200,7 @@ if __name__=='__main__':
     parser.add_argument(
         "--lr", type=float, default=0.01, metavar="LR", help="learning rate (default: 0.01)"
     )
-   
+    
     parser.add_argument("--model-arch", type=str, default='resnet50')
     parser.add_argument("--model-n-classes", type=int, default=5)
     # Container environment
