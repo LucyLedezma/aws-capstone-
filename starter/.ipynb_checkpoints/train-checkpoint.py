@@ -137,6 +137,18 @@ def create_data_loaders(path, batch_size):
                                              )
     return  data_loader
 
+def model_fn(model_dir):
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    model = net().to(device)
+    
+    model_path = os.path.join(model_dir, "model.pth")
+    with open(model_path, "rb") as f:
+        checkpoint = torch.load(f , map_location =device)
+        model.load_state_dict(checkpoint)
+        print("The model was loaded!")
+    model.eval()
+    return model
+
 def main(args):
     '''
     TODO: Initialize a model by calling the net function
