@@ -7,24 +7,6 @@ import torch.optim as optim
 import torchvision
 import torchvision.models as models
 import torchvision.transforms as transforms
-import argparse
-import os
-from PIL import ImageFile
-try:
-    import smdebug.pytorch as smd
-except Exception as e:
-    print(f'The module {str(e)} has not been installed')
-
-ImageFile.LOAD_TRUNCATED_IMAGES = True
-
-
-import numpy as np
-import torch
-import torch.nn as nn
-import torch.optim as optim
-import torchvision
-import torchvision.models as models
-import torchvision.transforms as transforms
 import os
 import argparse
 from PIL import ImageFile
@@ -130,7 +112,7 @@ def train(model, train_loader,  validation_loader, epochs,  criterion, optimizer
     return model
     
     
-def net(n_classes: int,  model_arch: str ='resnet50' ):
+def net(n_classes: int = 5,  model_arch: str ='resnet50' ):
     '''
     TODO: Complete this function that initializes your model
           Remember to use a pretrained model

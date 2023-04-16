@@ -101,7 +101,7 @@ def train(model, train_loader,  validation_loader, epochs,  criterion, optimizer
     return model
     
     
-def net(n_classes: int,  model_arch: str ='resnet50' ):
+def net(n_classes: int = 5,  model_arch: str ='resnet50' ):
     '''
     TODO: Complete this function that initializes your model
           Remember to use a pretrained model
