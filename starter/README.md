@@ -49,4 +49,4 @@ I choosed the resnet50, because it is a Deep Convolutional Neural Network,  this
   - Hyperparameter tunning  I did Hyperparameter tunning, I wanted to improve my model performance, so with this result I retrained a new model. 
   - Model Profiling and Debugging: Futhermore, I performed this step, I really wanted to know how the model was trained and how the resources were used. for this step I wrote the train_hook.py script as the new  entry_point of the estimator.
   - Model Deployment:  The model is ready, but in the projects we have a team whose need to request the model and make predictions, so in order to demonstrate this skill I deployed the model into an enpoint.
-  - Multi-instance training: 
+  - Multi-instance training: I have setted multi-instance training with 5 instances, in this case the training job performed faster than previous configuration.
