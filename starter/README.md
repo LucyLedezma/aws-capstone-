@@ -10,7 +10,7 @@ So, I am going to build a model that can count the number of objects in each bin
 For run this project, you should:
 -  open studio in sagemaker 
 - download this project into the environment
-- select the PyTorch 1.10 image Python 3.8 CPU Optimized and ml.t3.medium 2 vCPU + 4 GiB instannce type for both notebooks.
+- select the PyTorch 1.10 image Python 3.8 CPU Optimized and ml.t3.medium 2 vCPU + 4 GiB instance type for both notebooks.
 
 
 ## Dataset
@@ -18,7 +18,7 @@ For run this project, you should:
 ### Overview
 
 The Dataset is called  Amazon Bin Image Dataset, this is a special dataset that contains almost 500000 images of bins, the classes are presented in folders called : 1, 2, 3 , 4 and 5 ; corresponding to the number of objects in  each bin.
-For this project, the sagemaker.ipynb has the necessary statements for download a subset of it. 
+For this project, the sagemaker.ipynb has the necessary statements for downloading a subset of it. 
 
 ### Access
 I accessed to this data by  downloanding it from amazon s3 with this path: 
