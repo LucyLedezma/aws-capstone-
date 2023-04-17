@@ -103,8 +103,9 @@ def train(model, train_loader,  validation_loader, epochs,  criterion, optimizer
     
 def net(n_classes: int = 5,  model_arch: str ='resnet50' ):
     '''
-    TODO: Complete this function that initializes your model
-          Remember to use a pretrained model
+    Args:
+    n_classes: number of neurons in the last layer,  it correspond to the number of classes
+    model_arch: pretrained model to load.
     '''
     model = None
     if model_arch == 'resnet50':

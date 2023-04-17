@@ -6,20 +6,21 @@ Distribution centers often use robots to move objects. Objects are carried in bi
 So, I am going to build a model that can count the number of objects in each bin.
 
 ## Project Set Up and Installation
-**OPTIONAL:** If your project has any special installation steps, this is where you should put it. To turn this project into a professional portfolio project, you are encouraged to make your `README` detailed and self-explanatory. For instance, here you could explain how to set up your project in AWS and provide helpful screenshots of the process.
-For run this project, you should install:
-pytorch
+
+For run this project, you should:
+-  open studio in sagemaker 
+- download this project into the environment
+- select the PyTorch 1.10 image Python 3.8 CPU Optimized and ml.t3.medium 2 vCPU + 4 GiB instannce type for both notebooks.
 
 
 ## Dataset
 
 ### Overview
-**TODO**: Explain about the data you are using and where you got it from.
+
 The Dataset is called  Amazon Bin Image Dataset, this is a special dataset that contains almost 500000 images of bins, the classes are presented in folders called : 1, 2, 3 , 4 and 5 ; corresponding to the number of objects in  each bin.
 For this project, the sagemaker.ipynb has the necessary statements for download a subset of it. 
 
 ### Access
-**TODO**: Explain how you are accessing the data in AWS and how you uploaded it
 I accessed to this data by  downloanding it from amazon s3 with this path: 
     - s3://aft-vbi-pds/bin-images
 When the download process finished, I splitted it into 3 subsets:
@@ -31,7 +32,7 @@ after this, I could upload to s3 by executing:
   in the notebook.
 
 ## Model Training
-**TODO**: What kind of model did you choose for this experiment and why? Give an overview of the types of hyperparameters that you specified and why you chose them. Also remember to evaluate the performance of your model.
+
 
 I choosed the resnet50, because it is a Deep Convolutional Neural Network,  this kind of onetwork is oriented to image recognition.  since I have a classification problem, I need to recognize images into one of five classes. 
 - batch-size :  I choose this because  it has a direct relation with the accuray of the model. This is the number of samples in a training step.
@@ -42,6 +43,10 @@ First Values:
 
 The   hyperparamters below were found by hyperparameter tuning process:
 hyperparameters= { 'batch-size':  128,  'lr': 0.00254525353426351}
+the model got a performance of:
+- Testing Accuracy: 30.033637674195095,
+- Testing Loss: 1.5222831945588875
+
 
 
 ## Machine Learning Pipeline
@@ -53,7 +58,6 @@ hyperparameters= { 'batch-size':  128,  'lr': 0.00254525353426351}
 
 
 ## Standout Suggestions
-**TODO (Optional):** This is where you can provide information about any standout suggestions that you have attempted.
   - Hyperparameter tunning  I did Hyperparameter tunning, I wanted to improve my model performance, so with this result I retrained a new model. 
   - Model Profiling and Debugging: Futhermore, I performed this step, I really wanted to know how the model was trained and how the resources were used. for this step I wrote the train_hook.py script as the new  entry_point of the estimator.
   - Model Deployment:  The model is ready, but in the projects we have a team whose need to request the model and make predictions, so in order to demonstrate this skill I deployed the model into an enpoint.
