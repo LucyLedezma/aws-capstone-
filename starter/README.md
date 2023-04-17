@@ -51,9 +51,9 @@ the model got a performance of:
 
 ## Machine Learning Pipeline
 
-    Upload Training Data: I will  upload the training data to an S3 bucket. but first I am going to download it from the source and process it.
-    Model Training Script: I will write a script to train a model on that dataset, this script is called 'tran.py'.  I will select fixed hyperparameters and train a first model.
-    Train in SageMaker: Finally I am going to use SageMaker to run that training script and train my model.
+- Upload Training Data: I will  upload the training data to an S3 bucket. but first I am going to download it from the source and process it.
+- Model Training Script: I will write a script to train a model on that dataset, this script is called 'tran.py'.  I will select fixed hyperparameters and train a - first model.
+- Train in SageMaker: Finally I am going to use SageMaker to run that training script and train my model.
     
 
 
