@@ -70,4 +70,4 @@ the model got a performance of:
    ## Benchmark Model
    The  Benchmark model used was resnet18, I performed transfer learning with this model too.  I trained with the same dataset mentioned previously.
    Below we have the script name:
-   - bench-mark.ipynb
+   - benchmark.ipynb
